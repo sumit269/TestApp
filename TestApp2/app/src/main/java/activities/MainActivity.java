@@ -1,9 +1,11 @@
-package com.testapplication.testapp;
+package activities;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.testapplication.testapp.R;
 
 
 public class MainActivity extends ActionBarActivity {
