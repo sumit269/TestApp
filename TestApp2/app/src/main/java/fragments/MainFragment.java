@@ -2,9 +2,11 @@ package fragments;
 
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,6 @@ public class MainFragment extends Fragment {
     private FactsAdapter adapter;
     private List<FactItem> factCollection = new ArrayList<>();
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Facts facts;
     private HttpURLConnection urlConnection = null;
 
     @Override
@@ -70,17 +71,17 @@ public class MainFragment extends Fragment {
 
         adapter = new FactsAdapter(getActivity(), factCollection, R.layout.list_item);
         factsList.setAdapter(adapter);
-        if (facts != null) {
-            getActivity().getActionBar().setTitle(facts.title);
-        }
     }
 
     private class FetchFactsTask extends AsyncTask<String, Void, Facts> {
+        ProgressDialog dialog;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            swipeRefreshLayout.setRefreshing(true);
-            //TODO: Alternatively we can also show progressDialog here
+            //This can also be done using a common function in AppUtils.
+            //AppUtils.showProgressDialog(getActivity());
+            dialog = ProgressDialog.show(getActivity(), "Loading...", "Please wait...", true);
+            swipeRefreshLayout.setRefreshing(false); // we can set this to true if we want the default refresh indicator instead of the progressDialog
         }
 
         @Override
@@ -90,15 +91,18 @@ public class MainFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Facts factsResponse) {
-            if (getActivity().getActionBar() != null && factsResponse != null) {
-                getActivity().getActionBar().setTitle(facts.title);
+            if (((ActionBarActivity)getActivity()).getSupportActionBar() != null && factsResponse != null) {
+                ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(factsResponse.title);
             }
             if (factsResponse != null) {
                 factCollection.clear();
                 factCollection.addAll(factsResponse.factItemList);
                 adapter.notifyDataSetChanged();
             }
-            swipeRefreshLayout.setRefreshing(false);
+            dialog.dismiss();
+
+            //This can also be done using a common function in AppUtils.
+            //AppUtils.hideProgressDialog();
         }
     }
 

@@ -9,7 +9,10 @@ import com.testapplication.testapp.R;
 
 import fragments.MainFragment;
 
-
+/**
+ * We could make a BaseActivity that could have default methods like showing progressDialog,
+ * loading fragments,
+ */
 public class MainActivity extends ActionBarActivity {
 
     private final String FRAGMENT_TAG = "MainFragment";
