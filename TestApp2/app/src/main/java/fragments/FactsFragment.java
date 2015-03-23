@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import activities.BaseActivity;
 import adapters.FactsAdapter;
 import model.FactItem;
 import model.Facts;
@@ -33,7 +33,7 @@ import utils.AppUtils;
 /**
  * Created by SumitBhatia on 22/03/15.
  */
-public class MainFragment extends Fragment {
+public class FactsFragment extends Fragment {
 
     private ListView factsList;
     private FactsAdapter adapter;
@@ -49,7 +49,7 @@ public class MainFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new FetchFactsTask().execute();
+                fetchFeed();
             }
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -57,12 +57,18 @@ public class MainFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        if(AppUtils.isNetworkAvailable(getActivity())) {
+        fetchFeed();
+        return view;
+    }
+
+    private void fetchFeed(){
+        if (AppUtils.isNetworkAvailable(getActivity())) {
             new FetchFactsTask().execute();
         } else {
-            //TODO: Show error here
+            ((BaseActivity) getActivity()).showAlertDialog(getActivity(), getActivity().getResources().getString(R.string.error),
+                    getActivity().getResources().getString(R.string.network_not_available), true);
+            swipeRefreshLayout.setRefreshing(false);
         }
-        return view;
     }
 
     @Override
@@ -75,13 +81,12 @@ public class MainFragment extends Fragment {
 
     private class FetchFactsTask extends AsyncTask<String, Void, Facts> {
         ProgressDialog dialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //This can also be done using a common function in AppUtils.
-            //AppUtils.showProgressDialog(getActivity());
-            dialog = ProgressDialog.show(getActivity(), "Loading...", "Please wait...", true);
-            swipeRefreshLayout.setRefreshing(false); // we can set this to true if we want the default refresh indicator instead of the progressDialog
+            ((BaseActivity) getActivity()).showProgressDialog(getActivity(), "Note", "Please wait...", false, false);
+            swipeRefreshLayout.setRefreshing(false);// we can set this to true if we want the default refresh indicator instead of the progressDialog
         }
 
         @Override
@@ -91,18 +96,16 @@ public class MainFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Facts factsResponse) {
-            if (((ActionBarActivity)getActivity()).getSupportActionBar() != null && factsResponse != null) {
-                ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(factsResponse.title);
+            if (factsResponse != null) {
+                ((BaseActivity) getActivity()).setActionBarTitle(getActivity(), factsResponse.title);
             }
             if (factsResponse != null) {
                 factCollection.clear();
                 factCollection.addAll(factsResponse.factItemList);
                 adapter.notifyDataSetChanged();
             }
-            dialog.dismiss();
+            ((BaseActivity) getActivity()).hideProgressDialog();
 
-            //This can also be done using a common function in AppUtils.
-            //AppUtils.hideProgressDialog();
         }
     }
 

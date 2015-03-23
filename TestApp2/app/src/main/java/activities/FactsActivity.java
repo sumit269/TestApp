@@ -3,17 +3,11 @@ package activities;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
-
 import com.testapplication.testapp.R;
 
-import fragments.MainFragment;
+import fragments.FactsFragment;
 
-/**
- * We could make a BaseActivity that could have default methods like showing progressDialog,
- * loading fragments,
- */
-public class MainActivity extends ActionBarActivity {
+public class FactsActivity extends BaseActivity {
 
     private final String FRAGMENT_TAG = "MainFragment";
     private Fragment fragment;
@@ -24,7 +18,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            fragment = new MainFragment();
+            fragment = new FactsFragment();
         } else {
             fragment = getFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         }
@@ -34,13 +28,5 @@ public class MainActivity extends ActionBarActivity {
                 .setTransition(FragmentTransaction.TRANSIT_NONE)
                 .commit();
     }
-
-
-
-
-
-
-
-
 
 }

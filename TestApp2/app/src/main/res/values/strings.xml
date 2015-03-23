@@ -6,5 +6,6 @@
     <string name="sample_text1">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="sample_text2">Lorem ipsum dolor sit amet, consectetur adipiscing elit,  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <string name="not_available">N/A</string>
-
+    <string name="error">Error</string>
+    <string name="network_not_available">Please check your network connection and swipe down to refresh feed</string>
 </resources>
