@@ -85,7 +85,8 @@ public class FactsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((BaseActivity) getActivity()).showProgressDialog(getActivity(), "Note", "Please wait...", false, false);
+            ((BaseActivity) getActivity()).showProgressDialog(getActivity(), getActivity().getResources().getString(R.string.note),
+                    getActivity().getResources().getString(R.string.please_wait), false, false);
             swipeRefreshLayout.setRefreshing(false);// we can set this to true if we want the default refresh indicator instead of the progressDialog
         }
 

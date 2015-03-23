@@ -32,9 +32,9 @@
 
         <ImageView
             android:id="@+id/img_fact"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="5dp"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:padding="@dimen/layout_margin"
             android:layout_toLeftOf="@+id/img_arrow"
             android:scaleType="fitXY"
             android:layout_centerVertical="true"
